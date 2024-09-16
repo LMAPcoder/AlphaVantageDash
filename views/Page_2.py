@@ -10,6 +10,9 @@ def fetch_fx_daily(sym_1, sym_2):
         from_symbol=sym_1,
         to_symbol=sym_2
     ).json()
+    if "Information" in json_data:
+        st.warning(json_data['Information'])
+        st.stop()
     return json_data
 
 @st.cache_data
@@ -19,6 +22,9 @@ def fetch_fx_now(sym_1, sym_2):
         from_currency=sym_1,
         to_currency=sym_2
     ).json()
+    if "Information" in json_data:
+        st.warning(json_data['Information'])
+        st.stop()
     return json_data
 
 @st.cache_data
@@ -28,6 +34,9 @@ def fetch_fxd_daily(sym_1, sym_2):
         symbol=sym_1,
         market=sym_2
     ).json()
+    if "Information" in json_data:
+        st.warning(json_data['Information'])
+        st.stop()
     return json_data
 
 

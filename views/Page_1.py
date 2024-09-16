@@ -12,6 +12,9 @@ def fetch_symbol_search(keywords):
         keywords=keywords,
         apike=API_KEY
     ).json()
+    if "Information" in json_data:
+        st.warning(json_data['Information'])
+        st.stop()
     return json_data
 
 @st.cache_data
@@ -22,6 +25,9 @@ def fetch_time_series_daily(ticker):
         outputsize='compact', # compact returns only the latest 100 data points
         datatype='json'
         ).json()
+    if "Information" in json_data:
+        st.warning(json_data['Information'])
+        st.stop()
     return json_data
 
 @st.cache_data
@@ -30,6 +36,9 @@ def fetch_splits_events(ticker):
         function='SPLITS',
         symbol=ticker,
         ).json()
+    if "Information" in json_data:
+        st.warning(json_data['Information'])
+        st.stop()
     return json_data
 
 @st.cache_data
@@ -38,6 +47,9 @@ def fetch_overview(ticker):
         function='OVERVIEW',
         symbol=ticker,
         ).json()
+    if "Information" in json_data:
+        st.warning(json_data['Information'])
+        st.stop()
     return json_data
 
 @st.cache_data
@@ -46,6 +58,9 @@ def fetch_etf_profile(ticker):
         function='ETF_PROFILE',
         symbol=ticker,
         ).json()
+    if "Information" in json_data:
+        st.warning(json_data['Information'])
+        st.stop()
     return json_data
 
 @st.cache_data
@@ -54,6 +69,9 @@ def fetch_quote_endpoint(ticker):
         function='GLOBAL_QUOTE',
         symbol=ticker,
         ).json()
+    if "Information" in json_data:
+        st.warning(json_data['Information'])
+        st.stop()
     return json_data
 
 @st.dialog("Contact Me")
@@ -95,12 +113,13 @@ with st.sidebar:
             value=10  # The value of the slider when it first renders.
         )
 
+
+    st.sidebar.markdown("Made with ❤️ by Leonardo")
+
     button = st.button("✉️ Contact Me")
 
     if button:
         show_contact_form()
-
-    st.sidebar.markdown("Made with ❤️ by Leonardo")
 
 
 
@@ -121,9 +140,11 @@ if "market_status" not in st.session_state:
         apike=API_KEY
     ).json()
 
-    st.session_state.market_status = json_data
+    if "Information" in json_data:
+        st.warning(json_data['Information'])
+        st.stop()
 
-st.write(st.session_state.market_status)
+    st.session_state.market_status = json_data
 
 df = pd.DataFrame(st.session_state.market_status['markets']).drop(columns=['notes'])
 

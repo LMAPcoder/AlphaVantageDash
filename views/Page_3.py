@@ -9,6 +9,9 @@ def fetch_commodity(comm, interval="monthly"):
         function=comm,
         interval=interval
     ).json()
+    if "Information" in json_data:
+        st.warning(json_data['Information'])
+        st.stop()
     return json_data
 
 
