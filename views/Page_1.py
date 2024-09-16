@@ -123,6 +123,8 @@ if "market_status" not in st.session_state:
 
     st.session_state.market_status = json_data
 
+st.write(st.session_state.market_status)
+
 df = pd.DataFrame(st.session_state.market_status['markets']).drop(columns=['notes'])
 
 col1.dataframe(
