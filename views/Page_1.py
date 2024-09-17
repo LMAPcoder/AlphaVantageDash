@@ -98,8 +98,10 @@ with st.sidebar:
 
     KEYWORD = st.text_input(
         label="Security",
-        value='MSFT'
+        value='MSFT',
+        placeholder="Input security ticker"
     )
+    st.write("eg: MSFT, QQQ, SPY")
     INDICATORS = st.multiselect(
         label="Technical indicators:",
         options=['SMA', 'EMA']
@@ -116,7 +118,7 @@ with st.sidebar:
 
     st.sidebar.markdown("Made with ❤️ by Leonardo")
 
-    button = st.button("✉️ Contact Me")
+    button = st.button("✉️ Contact Me", key="contact")
 
     if button:
         show_contact_form()
@@ -133,6 +135,10 @@ col1, col2 = st.columns([0.7, 0.3], gap="medium")
 
 col1.header("Global Markets Status")
 
+button = col1.button("Refresh", key="refresh_mkt_status")
+if button:
+    del st.session_state['market_status']
+
 if "market_status" not in st.session_state:
 
     json_data = request_alphavantage(
@@ -145,6 +151,8 @@ if "market_status" not in st.session_state:
         st.stop()
 
     st.session_state.market_status = json_data
+    now = datetime.now()
+    col1.write(f'Latest update: {now.strftime("%Y-%m-%d %H:%M")}')
 
 df = pd.DataFrame(st.session_state.market_status['markets']).drop(columns=['notes'])
 
@@ -157,7 +165,8 @@ col2.header("Search Endpoint")
 
 KEYWORDS = col2.text_input(
     label="Search box",
-    value=None
+    value=None,
+    placeholder="Enter security name"
 )
 
 if KEYWORDS:
@@ -181,6 +190,11 @@ NAME = json_data['bestMatches'][0]['2. name']
 
 st.header(f"Stock: {TICKER}")
 st.write(NAME)
+
+button = st.button("Refresh", key="refresh_security")
+if button:
+    fetch_quote_endpoint.clear()
+    fetch_time_series_daily.clear()
 
 #----INFORMATION----
 with st.expander("More info"):
