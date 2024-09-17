@@ -135,6 +135,10 @@ col1, col2 = st.columns([0.7, 0.3], gap="medium")
 
 col1.header("Global Markets Status")
 
+button = col1.button("Refresh", key="refresh_mkt_status")
+if button:
+    del st.session_state['market_status']
+
 if "market_status" not in st.session_state:
 
     json_data = request_alphavantage(
@@ -142,17 +146,14 @@ if "market_status" not in st.session_state:
         apike=API_KEY
     ).json()
 
+    st.session_state.market_status = json_data
+
     if "Information" in json_data:
         st.warning(json_data['Information'])
         st.stop()
 
-    st.session_state.market_status = json_data
     now = datetime.now()
     col1.write(f'Latest update: {now.strftime("%Y-%m-%d %H:%M")}')
-
-button = col1.button("Refresh", key="refresh_mkt_status")
-if button:
-    del st.session_state['market_status']
 
 df = pd.DataFrame(st.session_state.market_status['markets']).drop(columns=['notes'])
 
