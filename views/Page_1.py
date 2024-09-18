@@ -89,8 +89,10 @@ st.set_page_config(
 )
 
 API_KEY = st.secrets["API_KEY"]
-
-
+st.write(API_KEY)
+button = st.button("reseteo")
+if button:
+    st.cache_data.clear()
 
 
 # ---- SIDEBAR ----
